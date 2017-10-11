@@ -11,6 +11,8 @@
   - 成员西西莉亚（CeciliaCheng-广州）（前端）
   - 成员陈瑶霖（SailingChen10-北京）（观察员）
   - 成员胡杰颖（hujieying-成都）（后端）
+  - 成员张之洞（behindsea-恩施）（后端，微信）
 
 ## CHANGELOG
+- 2017-10-9 更新
 - 2017-9-26 醉舟创建
