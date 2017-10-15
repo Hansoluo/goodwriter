@@ -3,6 +3,8 @@ import xml.etree.ElementTree as ET
 import config
 from models import User
 from exts import db
+from src.wx import valication, reply_text
+
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -72,6 +74,17 @@ def my_context_processor():
             return {'user':user}
     return {}
 
+@app.route('/wx', methods=['GET','POST'])
+def wx():
+    if request.method == 'GET':
+        valicate_params = request.args
+        return valication(valicate_params)
+    else:
+        xml_recv = ET.fromstring(request.data)
+        xml_reply = reply_text(xml_recv)
+        response = make_response(xml_reply)
+        response.content_type = 'application/xml'
+        return response
 
 
 # @app.route('/login', methods=['POST'])
@@ -143,17 +156,6 @@ def my_context_processor():
 #
 #     return render_template('article_edit.html', tag_list=tag_list, material_list= material_list, title =title,content=content)
 #
-# @app.route('/wx', methods=['GET','POST'])
-# def wx():
-#     if request.method == 'GET':
-#         valicate_params = request.args
-#         return valication(valicate_params)
-#     else:
-#         xml_recv = ET.fromstring(request.data)
-#         xml_reply = reply_text(path, xml_recv)
-#         response = make_response(xml_reply)
-#         response.content_type = 'application/xml'
-#         return response
 
 
 if __name__ == '__main__':

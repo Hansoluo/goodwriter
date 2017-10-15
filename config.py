@@ -15,3 +15,6 @@ DB_URI = '{}+{}://{}:{}@{}:{}/{}?charset=utf8'.format(DIALECT,DRIVER,USERNAME,PA
 SQLALCHEMY_DATABASE_URI = DB_URI
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+#微信token
+WX_TOKEN = '2vX79QF'
