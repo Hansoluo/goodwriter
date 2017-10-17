@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title>天气查询网</title>
+  </head>
+  <style>
+    .container-small {
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    .width-limit {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .nav li {
+      float: left;
+    }
+ </style>
+  <body>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css">
+  <body>
+
+    <div class="navbar navbar-default" role="navigation">
+      <div class="width-limit">
+          <div class="navbar-header">
+            <a href="#" class="navbar-brand">
+              Fluent Draft <i class="icon-pencil"></i> </a>
+          </div>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">写素材</a></li>
+            <li><a href="#">写文章</a></li>
+          </ul>
+      </div>
+    </div>
+
+    <div class="draft-list">
+      <div class="container container-small">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">标签列表</div>
+                  </div>
+                  <div class="panel-body">
+                {% for i in weather_info %}
+                    <p>{{ i }}</b></p>
+                {% endfor %}
+      </div>
+    </div>
+
+  </body>
+</html>
