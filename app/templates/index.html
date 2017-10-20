@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}goodwriter{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+	<h1>Hello,
+		{% if current_user.is_authenticated %}
+			{{ current_user.email }}
+		{% else %}
+			Stranger
+		{% endif %}!
+	</h1>
+</div>
+{% endblock %}
