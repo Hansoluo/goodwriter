@@ -1,11 +1,12 @@
-from flask import Flask,render_template,redirect,url_for,session,request
+from flask import Flask,render_template,redirect,url_for,session,request,make_response
 import xml.etree.ElementTree as ET
 import config
 from models import User,Material,Article
 from app import db
 from app import app
-from src.wx import valication, reply_text
+from app.wx import valication, reply_text
 from datetime import datetime
+from sqlalchemy import desc
 
 @app.route('/')
 def index():
@@ -103,13 +104,13 @@ def material_list():
     tag_all = Material.query.with_entities(Material.tag.distinct().label("tag")).filter(Material.user_id==session['user_id'])
     # return str(tag_all)
     if mater_id:
-        materials = Material.query.filter(Material.mater_id==int(mater_id),Material.user_id==session['user_id'])
+        materials = Material.query.filter(Material.mater_id==int(mater_id),Material.user_id==session['user_id']).order_by(desc(Material.edit_time))
         return render_template("material_list.html",materials=materials,tags=tag_all)
     elif tag:
-        materials = Material.query.filter(Material.tag==tag,Material.user_id==session['user_id'])
+        materials = Material.query.filter(Material.tag==tag,Material.user_id==session['user_id']).order_by(desc(Material.edit_time))
         return render_template("material_list.html",materials=materials,tags=tag_all)
     else:
-        materials = Material.query.filter(Material.user_id==session['user_id'])
+        materials = Material.query.filter(Material.user_id==session['user_id']).order_by(desc(Material.edit_time))
         return render_template("material_list.html",materials=materials,tags=tag_all)
 
 
@@ -152,13 +153,13 @@ def article_list():
     tag_all = Material.query.with_entities(Material.tag.distinct().label("tag")).filter(Material.user_id==session['user_id'])
 
     if artic_id:
-        articles = Article.query.filter(Article.artic_id==int(artic_id),Article.user_id==session['user_id'])
+        articles = Article.query.filter(Article.artic_id==int(artic_id),Article.user_id==session['user_id']).order_by(desc(Article.edit_time))
         return render_template("article_list.html",articles=articles,tags=tag_all)
     elif title:
-        articles = Article.query.filter(Article.title==title,Article.user_id==session['user_id'])
+        articles = Article.query.filter(Article.title==title,Article.user_id==session['user_id']).order_by(desc(Article.edit_time))
         return render_template("article_list.html",articles=articles,tags=tag_all)
     else:
-        articles = Article.query.filter(Article.user_id==session['user_id'])
+        articles = Article.query.filter(Article.user_id==session['user_id']).order_by(desc(Article.edit_time))
         return render_template("article_list.html",articles=articles,tags=tag_all)
 
 @app.context_processor

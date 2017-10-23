@@ -8,7 +8,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer,primary_key=True,autoincrement=True)
     email = db.Column(db.String(100),nullable=False)
     password = db.Column(db.String(100),nullable=False)
-    # openid = db.Column(db.String(50))
+    openid = db.Column(db.String(50))
     wechatid = db.Column(db.String(50))
     material = db.relationship('Material', backref='user', lazy='dynamic')
     article = db.relationship('Article', backref='user', lazy='dynamic')

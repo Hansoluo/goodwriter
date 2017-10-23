@@ -2,7 +2,7 @@
 import os
 
 #session需要用的
-SECRET_KEY = os.urandom(24)
+SECRET_KEY = "hjkawhedoi"
 
 DIALECT = 'mysql'
 DRIVER = 'pymysql'
