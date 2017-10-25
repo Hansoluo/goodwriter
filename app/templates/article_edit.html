@@ -7,6 +7,33 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css">
     <link href="//fonts.gdgdocs.org/css?family=Lobster" rel="stylesheet" type="text/css">
+
+    <script src="https://ajax.googleapis.bootcss.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script >
+    $(document).ready(function(){
+    $("#search").click(function() {
+      key = $("#key").val();
+      if (key != "") {
+        $.post("get_material",{key:key,tag:""}, function(result) {
+          $("#result").html(result);
+        });
+        // $("#Weatherdata").html(result);
+      } else {
+        alert("关键词不能为空！");
+      };
+    });
+    $("#search_tag").children('a').click(function() {
+      tag = $(this).text();
+      if (key != "") {
+        $.post("get_material",{key:"",tag:tag}, function(result) {
+          $("#result").html(result);
+        });
+        // $("#Weatherdata").html(result);
+      };
+    });
+  })
+    </script>
+
     <style>
         h1 { font-family: 'Pacifico', cursive; }
         hr { width: 100px; }
@@ -22,14 +49,14 @@
             <div class="col-sm-3">
 
                 <div class="well">
-                  <input type="text" placeholder="输入查找内容">
-                  <button type="submit" class="btn btn-info btn-xs">搜索</button>
+                  <input type="text" placeholder="输入查找内容" id= "key">
+                  <button type="button" class="btn btn-info btn-xs" id ="search">搜索</button>
                     <form class="form-inline">
-                        <div >
+                        <div id= 'search_tag'>
                             <button class="btn btn-link btn-lg"><span class="glyphicon glyphicon-paperclip" aria-hidden="true">标签</span></button>
                               <br/>
                               {% for tag in tags %}
-                              <a href="{{url_for('material_list',tag=tag.tag)}}">{{tag.tag}}</a>
+                              <a>{{tag.tag}}</a>
 
                               {%endfor%}
 
@@ -57,7 +84,7 @@
                 <h3>内容</h3>
                 <textarea  class="form-control" placeholder="内容" name="content" ></textarea>
                 {% endif %}
-                
+
                 <br/>
                 <button class="btn btn-primary" type="submit">提交</button>
               </form >

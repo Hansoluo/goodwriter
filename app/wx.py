@@ -30,6 +30,25 @@ def valication(params):
             return echostr
         else:
             return ""
+def reply_event(xml_recv):
+    toUserName = xml_recv.find("ToUserName").text
+    fromUserName = xml_recv.find("FromUserName").text
+    print(str(xml_recv))
+    content = xml_recv.find("Content").text
+
+
+    if content == "subscribe":
+        reply_content = "帮助信息\n\n1.微信端功能需要注册方可使用\n2.输入“帮助”可查看帮助信息\n3.输入“历史”可以查看最近保存的一条素材\n4.保存素材信息格式：#标签#内容\n5.所有用作格式识别的标点符号均为英文标点"
+    else:
+        reply_content = "未知事件"
+    xlm_reply = reply_patten(fromUserName,toUserName,reply_content)
+    # print(xlm_reply)
+    return xlm_reply
+
+def reply_else(xml_recv):
+    toUserName = xml_recv.find("ToUserName").text
+    fromUserName = xml_recv.find("FromUserName").text
+    return reply_patten(fromUserName,toUserName,"目前仅提供文字信息功能，更多功能敬请期待！")
 
 def reply_text(xml_recv):
     """回复函数，"""
@@ -41,15 +60,7 @@ def reply_text(xml_recv):
     # 此处wechatid有待修改为微信号
     user = User.query.filter(User.openid == fromUserName).first()
     if user==None:
-        user_re = re.compile(f"邮箱:(?P<email>.+)\n微信号:(?P<wechatid>.+)\n密码:(?P<password>.+)", re.DOTALL)
-        user_match = user_re.match(content)
-        if user_match == None:
-            reply_content = '您尚未注册微信端功能\n\n请发送如下格式的信息注册微信端功能：\n邮箱:(邮箱)\n微信号:(微信号)\n密码:(密码)\n（实际发送信息时请去掉括号，若先前在web端注册过，信息将会被重置）'
-            return reply_patten(fromUserName,toUserName,reply_content)
-        else:
-            regist_wx(user_match.group('email'),user_match.group('wechatid'),user_match.group('password'),fromUserName)
-            reply_content = '微信端功能开通成功！注册信息已更新！'
-            return reply_patten(fromUserName,toUserName,reply_content)
+        return regist_wx(fromUserName,toUserName,content)
 
     if content=="帮助":
         reply_content = "帮助信息\n\n1.微信端功能需要注册方可使用\n2.输入“帮助”可查看帮助信息\n3.输入“历史”可以查看最近保存的一条素材\n4.保存素材信息格式：#标签#内容\n5.所有用作格式识别的标点符号均为英文标点"
@@ -82,19 +93,30 @@ def reply_text(xml_recv):
 
     return xlm_reply
 
-def regist_wx(email,wechatid,password,openid):
+def regist_wx(toUserName,fromUserName,content):
     """注册用户openid"""
-    user = User.query.filter(User.email == email).first()
-    if user:
-        user.openid = openid
-        user.password = password
-        user.wechatid = wechatid
-        db.session.commit()
+    user_re = re.compile(f"邮箱:(?P<email>.+)\n微信号:(?P<wechatid>.+)\n密码:(?P<password>.+)", re.DOTALL)
+    user_match = user_re.match(content)
+    if user_match == None:
+        reply_content = '您尚未注册微信端功能\n\n请发送如下格式的信息注册微信端功能：\n邮箱:(邮箱)\n微信号:(微信号)\n密码:(密码)\n（实际发送信息时请去掉括号，若先前在web端注册过，信息将会被重置）'
+        return reply_patten(fromUserName,toUserName,reply_content)
     else:
-        user = User(email=email,wechatid=wechatid,password=password,openid=openid)
-        db.session.add(user)
-        db.session.commit()
-    return
+        email = user_match.group('email')
+        wechatid = user_match.group('wechatid')
+        password = user_match.group('password')
+        user = User.query.filter(User.email == email).first()
+        if user:
+            user.openid = openid
+            user.password = password
+            user.wechatid = wechatid
+            db.session.commit()
+        else:
+            user = User(email=email,wechatid=wechatid,password=password,openid=openid)
+            db.session.add(user)
+            db.session.commit()
+        reply_content = '微信端功能开通成功！注册信息已更新！'
+        return reply_patten(fromUserName,toUserName,reply_content)
+
 
 def reply_patten(toUserName,fromUserName,reply_content):
     xlm_reply = f"""<xml>

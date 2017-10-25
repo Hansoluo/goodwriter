@@ -2,11 +2,11 @@ from flask import Flask,render_template,redirect,url_for,session,request,make_re
 import xml.etree.ElementTree as ET
 import config
 from models import User,Material,Article
-from app import db
-from app import app
-from app.wx import valication, reply_text
+from app import db,app
+from app.wx import valication, reply_text, reply_event, reply_else
 from datetime import datetime
 from sqlalchemy import desc
+
 
 @app.route('/')
 def index():
@@ -52,7 +52,7 @@ def login():
             session['user_id'] = user.user_id
             # 如果想在31天内都不需要登录
             session.permanent = True
-            print(url_for('index'))
+
             return redirect(url_for('index'))
         else:
             return u'邮箱或者密码错误，请确认后重新登录'
@@ -63,6 +63,25 @@ def logout():
     #session.pop('user_id')
     session.clear()
     return redirect(url_for('login'))
+
+@app.route("/get_material",methods=['GET','POST'])
+def get_material():
+    """用于查询标签"""
+    if request.method == "GET":
+        key = request.args.get('key')
+        tag = request.args.get('tag')
+    else:
+        key = request.form['key']
+        tag = request.form['tag']
+    print(key,tag)
+    if key:
+        materials = Material.query.filter(Material.content.like(f"%{key}%"),Material.user_id==session['user_id']).order_by(desc(Material.edit_time))
+    elif tag:
+        materials = Material.query.filter(Material.tag.like(f"%{tag}%"),Material.user_id==session['user_id']).order_by(desc(Material.edit_time))
+    else:
+        materials = Material.query.filter(Material.user_id==session['user_id']).order_by(desc(Material.edit_time))
+
+    return render_template('get_material.html',materials=materials)
 
 @app.route('/material_edit', methods=['GET','POST'])
 def material_edit():
@@ -178,7 +197,14 @@ def wx():
         return valication(valicate_params)
     else:
         xml_recv = ET.fromstring(request.data)
-        xml_reply = reply_text(xml_recv)
+        msgtype = xml_recv.find("MsgType").text
+        # print(request.data)
+        if msgtype == "event":
+            xml_reply = reply_event(xml_recv)
+        elif msgtype == "text":
+            xml_reply = reply_text(xml_recv)
+        else:
+            xml_reply = reply_else(xml_recv)
         response = make_response(xml_reply)
         response.content_type = 'application/xml'
         return response
