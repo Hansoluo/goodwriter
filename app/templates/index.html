@@ -1,60 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css">
-    <link href="//fonts.gdgdocs.org/css?family=Lobster" rel="stylesheet" type="text/css">
-    <style>
-        h1 { font-family: 'Pacifico', cursive; }
-        h2 { font-family: 'Pacifico', cursive; }
-        h3 { font-family: 'Pacifico', cursive; }
-        p { font-family: 'Pacifico', cursive; }
-        a { font-family: 'Pacifico', cursive;color: black; }
-        label { font-family: 'Pacifico', cursive; }
-    </style>
-    <title>Goodwriter</title>
-</head>
-<body>
-    <div class="container-fluid">
-        <div class="page-header">
-            <h1 class="text-center">Goodwriter</h1>
+{% extends "layout.html" %}
+
+{% block head %}{% endblock %}
+{% block title %}Fluent Draft{% endblock %}
+{% block motto %}写作即是坐下来判断自己。——易卜生{% endblock %}
+{% block nav %}
+
+{% endblock %}
+
+{% block tag_list %}
+  {% for tag in tags %}
+    <a class="item" href="/index?tag={{tag.tag}}"># {{tag.tag}}</a>
+  {%endfor%}
+{% endblock %}
+
+{% block searchbox %}
+<form method="get">
+  <input type="text" placeholder="输入查找内容" name= "key">
+  <button type="submit" class="btn btn-info btn-xs">搜索</button>
+</form>
+{% endblock %}
+
+{% block main %}
+    <div class="article-list">
+      {% for item in items %}
+      <div class="item">
+          <a href="{% if item.type == "material" %} {{url_for('material', mater_id=item.id) }} {% else %} {{url_for('article', artic_id=item.id) }} {% endif %}"
+           class="title">{{item.title}}</a>
+          <div class="status">发布于：{{item.edit_time}} | 标签：{{item.tag}}</div>
+          <div class="content">
+        {{item.content}}
+          </div>
         </div>
+      {% endfor %}
     </div>
-    <div class="container-fluid">
-        <div class="col-md-2">
-            <div>
-                <h2>Goodwriter</h2>
-            </div>
-            <div>
-              {% if user %}
-                <h4><a href="#">欢迎{{ user.email }}</a></h4>
-                <h4><a href="{{ url_for('logout') }}">注销</a></h4>
-                <hr/>
-                <h4><a href="{{ url_for('article_edit') }}">写文章</a></h4>
-                <h4><a href="{{ url_for('article_list') }}">查文章</a></h4>
-                <hr/>
-                <h4><a href="{{ url_for('material_edit') }}">写素材</a></h4>
-                <h4><a href="{{ url_for('material_list') }}">查素材</a></h4>
-              {% else %}
-                <h4><a href="{{ url_for('login') }}">登录</a></h4>
-                <h4><a href="{{ url_for('regist') }}">注册</a></h4>
-              {% endif %}
-            </div>
-        </div>
-        <div class="col-md-1">
-        </div>
-        <div class="col-md-6">
-            <h3>
-                Goodwriter@文章自在网站介绍
-            </h3>
-            <hr>
-            <p>
-                Fluent Draft@文章自在是一个记录写作素材的网站。你可以在微信版和网页版都登陆，记录自己的写作素材，并同步。让你的写作像发微信一样方便快捷，只需要添加微博上常用的话题标签##，后台就可以自动帮你分类整理好写作素材。自由写作，文章自在~
-            </p>
-        </div>
-    </div>
-</body>
-</html>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block head %}{% endblock %}
+{% block title %}Fluent Draft{% endblock %}
+{% block motto %}写作即是坐下来判断自己。——易卜生{% endblock %}
+{% block nav %}
+
+{% endblock %}
+
+{% block tag_list %}
+  {% for tag in tags %}
+    <a class="item"># {{tag.tag}}</a>
+  {%endfor%}
+{% endblock %}
+
+{% block searchbox %}
+  <input type="text" placeholder="输入查找内容" id= "key">
+  <button type="button" class="btn btn-info btn-xs" id ="search">搜索</button>
+{% endblock %}
+
+{% block main %}
+  <div class="article">
+    <form action="material_edit" method="GET">
+    <button class="btn btn-primary" type="submit">修改</button>
+    <input name="mater_id" type="hidden" value="{{material.mater_id}}" />
+    <h1 class="title">{{ material.tag }}</h1>
+    </form>
+    <div class="status">发布于：{{ material.edit_time }}</div>
+    <div class="content">
+      {{ material.content }}
+    </div>
+  </div>
+{% endblock %}

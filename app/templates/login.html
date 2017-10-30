@@ -1,63 +1,41 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css">
-    <link href="//fonts.gdgdocs.org/css?family=Lobster" rel="stylesheet" type="text/css">
-    <style>
-        h1 { font-family: 'Pacifico', cursive; }
-        h2 { font-family: 'Pacifico', cursive; }
-        h3 { font-family: 'Pacifico', cursive; }
-        p { font-family: 'Pacifico', cursive; }
-        a { font-family: 'Pacifico', cursive;color: black; }
-        label { font-family: 'Pacifico', cursive; }
-    </style>
-    <title>Goodwriter</title>
-</head>
-<body>
-    <div class="container-fluid">
-        <div class="page-header">
-            <h1 class="text-center">Goodwriter</h1>
-        </div>
-    </div>
-    <div class="container-fluid">
-        <div class="col-md-2">
-            <div>
-                <h2>Goodwriter</h2>
-            </div>
-            <div>
-                <h4><a href="#">登录</a> | <a href="/regist">注册</a></h4>
-            </div>
-        </div>
-        <div class="col-md-1">
-        </div>
-        <div class="col-md-4">
-          <form action="" method="POST">
-            <div>
-                <h2>
-                    登录 或 <a href="regist"><span>注册</span></a>
-                </h2>
-            </div>
-            <hr>
-            <div class="btn-group pull-center">
-                <h3>Email</h3>
-                <input type="text" class="form-control" placeholder="example@163.com" name="email">
-                <h3>Password</h3>
-                <input type="password" class="form-control" placeholder="Password" name="password">
-                <input type="checkbox">
-                <label>Remember me?</label>
-            </div>
-            <div>
-                <button class="btn btn-primary" type="submit">登录</button>
-            </div>
-            <div>
-                <a href="#">Forget password?</a>
-            </div>
-          </form>
-        </div>
-    </div>
-</body>
-</html>
+{% extends "layout.html" %}
+
+{% block head %}{% endblock %}
+{% block title %}Fluent Draft{% endblock %}
+{% block motto %}写作即是坐下来判断自己。——易卜生{% endblock %}
+{% block nav %}
+
+{% endblock %}
+
+{% block tag_list %}
+
+{% endblock %}
+
+{% block searchbox %}
+
+{% endblock %}
+
+{% block main %}
+<div class="article">
+  <div>
+      <h4>欢迎登陆 <span>Fluent Draft</span>，你的写作助手</h4>
+          <hr>
+  </div>
+  <form class="container container-small" method="post">
+  <div class="btn-group pull-center">
+      <h3>邮箱</h3>
+      <input type="text" class="form-control" placeholder="example@163.com" name="email">
+      <h3>密码</h3>
+      <input type="password" class="form-control" placeholder="Password" name="password">
+      <input type="checkbox">
+      <label>Remember me?</label>
+  </div>
+  <div id="register">
+      <button class="btn btn-primary" type="submit">登陆</button>
+  </div>
+  <div>
+      <a href="#"><font size="3" face="arial" color="red">Forget password?</font></a>
+  </div>
+</form>
+</div>
+{% endblock %}

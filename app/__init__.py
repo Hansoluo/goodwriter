@@ -11,7 +11,7 @@ db = SQLAlchemy(app)
 lm = LoginManager()
 lm.login_view = 'login'
 
-
+# print(app.static_folder)
 
 from app import views
 import models

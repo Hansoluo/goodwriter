@@ -29,5 +29,6 @@ class Article(db.Model):
     artic_id = db.Column(db.Integer,primary_key=True,autoincrement=True)
     title = db.Column(db.String(20),nullable=False)
     content = db.Column(db.Text,nullable=False)
+    tag = db.Column(db.String(20),nullable=False)
     user_id =  db.Column(db.Integer, db.ForeignKey('user.user_id'),nullable=False)
     edit_time = db.Column(db.DateTime,nullable=False,default=datetime.utcnow())

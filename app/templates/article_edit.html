@@ -1,94 +1,51 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css">
-    <link href="//fonts.gdgdocs.org/css?family=Lobster" rel="stylesheet" type="text/css">
+{% extends "layout.html" %}
 
-    <script src="https://ajax.googleapis.bootcss.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script >
-    $(document).ready(function(){
-    $("#search").click(function() {
-      key = $("#key").val();
-      if (key != "") {
-        $.post("get_material",{key:key,tag:""}, function(result) {
-          $("#result").html(result);
-        });
-        // $("#Weatherdata").html(result);
-      } else {
-        alert("关键词不能为空！");
-      };
-    });
-    $("#search_tag").children('a').click(function() {
-      tag = $(this).text();
-      if (key != "") {
-        $.post("get_material",{key:"",tag:tag}, function(result) {
-          $("#result").html(result);
-        });
-        // $("#Weatherdata").html(result);
-      };
-    });
-  })
-    </script>
+{% block head %}
+<script type="text/javascript"  src="https://ajax.googleapis.bootcss.com/ajax/libs/jquery/1.12.0/jquery.min.js" ></script>
+<script src="/static/js/mater.js"></script>
+{% endblock %}
+{% block title %}Fluent Draft{% endblock %}
+{% block motto %}写作即是坐下来判断自己。——易卜生{% endblock %}
+{% block nav %}
 
-    <style>
-        h1 { font-family: 'Pacifico', cursive; }
-        hr { width: 100px; }
-    </style>
-    <title>Goodwriter</title>
-</head>
-<body>
-    <div class="container-fluid">
-        <h1 class="text-center">Goodwriter</h1>
+{% endblock %}
 
-    <hr/>
-        <div class="row">
-            <div class="col-sm-3">
+{% block tag_list %}
+<p>查询</p>
+  {% for tag in tags %}
+    <a class="item" title="{{tag.tag}}"># {{tag.tag}}</a>
+  {%endfor%}
+{% endblock %}
 
-                <div class="well">
-                  <input type="text" placeholder="输入查找内容" id= "key">
-                  <button type="button" class="btn btn-info btn-xs" id ="search">搜索</button>
-                    <form class="form-inline">
-                        <div id= 'search_tag'>
-                            <button class="btn btn-link btn-lg"><span class="glyphicon glyphicon-paperclip" aria-hidden="true">标签</span></button>
-                              <br/>
-                              {% for tag in tags %}
-                              <a>{{tag.tag}}</a>
+{% block searchbox %}
+  <input type="text" placeholder="输入查找内容" id= "key">
+  <button type="button" class="btn btn-info btn-xs" id ="search">搜索</button>
+{% endblock %}
 
-                              {%endfor%}
+{% block main %}
+  <div class="material">
+    <form class="container container-small" method="post">
+      <div class="btn-group">
+          <button class="btn btn-primary btn-block" type="submit">保存</button>
+      </div>
 
-                        </div>
-                    </form>
-
-                </div>
-                <div class="well" id="result">
-                  这里用来放查询结果
-                </div>
-            </div>
-            <div class="col-sm-9">
-              <form action="" method="POST">
-                {% if article is defined %}
-                <input name="artic_id" type="hidden" value="{{article.artic_id}}" />
-                <h3>标题</h3>
-                <input type="text" class="form-control" placeholder="标题" name="title" value="{{article.title}}"/>
-                <h3>内容</h3>
-                <textarea  class="form-control" placeholder="内容" name="content" >{{article.content}}</textarea>
-                <h4>更新时间：{{material.edit_time}}</h4>
-                {% else %}
-                <input name="artic_id" type="hidden" value="" />
-                <h3>标题</h3>
-                <input type="text" class="form-control" placeholder="标签" name="title" value=""/>
-                <h3>内容</h3>
-                <textarea  class="form-control" placeholder="内容" name="content" ></textarea>
-                {% endif %}
-
-                <br/>
-                <button class="btn btn-primary" type="submit">提交</button>
-              </form >
-            </div>
-        </div>
-</body>
-</html>
+        {% if article is defined %}
+        <div class="form-group">
+          <input name="artic_id" type="hidden" value="{{article.artic_id}}" />
+          <input class="form-control" type="text" name="title" placeholder="标题" style="width:700px;" value="{{ article.title }}"/>
+      </div>
+      <div class="form-group">
+          <textarea rows="3" cols="20" type="text" name="content" placeholder="write every thing in your mind" style="width:700px; height:500px;">{{ article.content }}</textarea>
+      </div>
+      {% else %}
+      <div class="form-group">
+          <input name="artic_id" type="hidden" value="" />
+          <input class="form-control" type="text" name="title" placeholder="标题" style="width:700px;" value=""/>
+      </div>
+      <div class="form-group">
+          <textarea rows="3" cols="20"  type="text" name="content" placeholder="write every thing in your mind" style="width:700px; height:500px;"></textarea>
+      </div>
+      {% endif %}
+    </form>
+  </div>
+{% endblock %}

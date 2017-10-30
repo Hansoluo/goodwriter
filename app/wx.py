@@ -69,7 +69,7 @@ def reply_text(xml_recv):
         material_last = Material.query.filter(Material.user_id==user.user_id).order_by(desc(Material.edit_time)).first()
         reply_content = f"#{material_last.tag}#{material_last.content}"
     else:
-        print(content)
+        # print(content)
         tag_re = re.compile(f"#(?P<tag>.+)#", re.DOTALL)
         tag_match = tag_re.match(content)
 
